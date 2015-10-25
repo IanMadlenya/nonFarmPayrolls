@@ -80,41 +80,64 @@ plotchart<-
                   
                   return(response);
                   });
+    } 
+    
+    if(input$view=="YoY"){
+      df$Period<-
+        factor(df$Period, levels=unique(df$Period), ordered=TRUE );
     }
     
     chart.title<-
       chart.titles[input$data];
     
+
     
     response<-
       (ggplot(df)
        + ggtitle( chart.title ));
+
+    x<-
+      input$time;
+    
+    if(input$view=="YoY"){ x<-"Year";}
     
     if(input$fill=="Neither"){ 
       response<-
-        (response + geom_bar(stat="identity", aes_string(x=input$time, y=input$measure)));
+        (response + geom_bar(stat="identity", aes_string(x=x, y=input$measure)));
     } else {
       response<-
-        (response + geom_bar(stat="identity", aes_string(x=input$time, y=input$measure, fill=input$fill)));
+        (response + geom_bar(stat="identity", aes_string(x=x, y=input$measure, fill=input$fill)));
     }
     
-    if(input$data=="Both" & input$time=="Year_Mo"){
+    if(input$data=="Both" & input$view=="Sequential"){
       response<-
         (response + facet_wrap( ~ data, nrow=2));
     }
     
-    if(input$data=="Both" & input$time=="Year"){
-      print(df);
+    if(input$view=="YoY"){
       response<-
-        (response + facet_wrap( ~ data, nrow=2));
+        (response + facet_wrap( ~ Period, ncol=3));
     }
+    
     
    response<-
       (response
       + scale_y_continuous(measures[input$measure], labels=comma)
-      + xlab(time.units[input$time])
+      #+ xlab(time.units[input$time])
       + theme_bw()
       );
+   
+   if(input$time=="Year_Mo"){
+     
+     mo<-
+       unique(df$Year_Mo);
+     
+     mo.breaks<-
+       mo[seq(3,length(mo),3)];
+     
+     response<-
+       (response + scale_x_discrete(name=time.units[input$time], labels=mo.breaks, breaks=mo.breaks));
+   }
    
    return(response);
   }
