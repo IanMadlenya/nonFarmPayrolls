@@ -184,6 +184,9 @@ fn<-
     output$chart<-
       renderPlot(plotchart(input=input));
     
+    output$ad<-
+      HTML("<em>Meaningful Solutions LLC</em>")
+    
   }
 
 shinyServer( fn );

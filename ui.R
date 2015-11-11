@@ -2,6 +2,9 @@
 shiny.title<-
   headerPanel("U.S. Nonfarm Payrolls");
 
+text.ad<-
+  "Copyright 2015 Meaningful Solutions LLC<br/><a href='http://meaningful-solutions.com'>Building Capacity for Your Curiosity</a>";
+
 annual.options<-
   conditionalPanel(condition="input.conditionedPanels==1"
                    , radioButtons("annual.data"
@@ -42,7 +45,7 @@ shiny.tabset<-
 
 
 shiny.main<-
-  mainPanel(shiny.tabset, plotOutput("chart"));
+  mainPanel(shiny.tabset, plotOutput("chart"), HTML(text.ad));
 
 shiny.layout<-
   sidebarLayout( shiny.sidebar, shiny.main );
