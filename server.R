@@ -174,6 +174,7 @@ plotchart<-
        (response + scale_x_discrete(name=time.units[time], labels=mo.breaks, breaks=mo.breaks));
    }
    
+   
    return(response);
   }
 
@@ -185,7 +186,7 @@ fn<-
       renderPlot(plotchart(input=input));
     
     output$ad<-
-      HTML("<em>Meaningful Solutions LLC</em>")
+      renderText("<em>Meaningful Solutions LLC</em>")
     
   }
 

@@ -13,7 +13,7 @@ annual.options<-
                                   , selected="seasonallyAdjusted")
                    , radioButtons("annual.measure", label="Measure", choices=list("Jobs Created"="diff", "Total Number of Jobs"="Value"), selected="diff")
                    , radioButtons("annual.fill", label="Fill", choices=list( "None"="Neither", "Year"="Year" ), selected="Neither")
-                   , sliderInput("annual.year", label="Year", min=1939, max=2015, value=c(2012,2014), sep="", step=1)
+                   , sliderInput("annual.year", label="Year", min=1939, max=2016, value=c(2013,2015), sep="", step=1)
                    , checkboxInput("annual.close", label="Stop Server", value=FALSE)
                    );
 
@@ -26,7 +26,7 @@ monthly.options<-
                    , radioButtons("monthly.view", label="View", choices=list("Sequential"="Sequential", "Year Over Year"="YoY"), selected="Sequential")
                    , radioButtons("monthly.measure", label="Measure", choices=list("Jobs Created"="diff", "Total Number of Jobs"="Value"), selected="diff")
                    , radioButtons("monthly.fill", label="Fill", choices=list( "None"="Neither", "Year"="Year", "Month"="Period" ), selected="Neither")
-                   , sliderInput("monthly.year", label="Year", min=1939, max=2015, value=c(2012,2014), sep="", step=1)
+                   , sliderInput("monthly.year", label="Year", min=1939, max=2016, value=c(2013,2015), sep="", step=1)
                    , checkboxInput("monthly.close", label="Stop Server", value=FALSE)
     );
 
