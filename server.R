@@ -2,7 +2,7 @@ require(ggplot2);
 require(scales);
 require(plyr);
 
-
+load("payroll.RData");
 
 csv<-
   c(
@@ -23,30 +23,9 @@ time.units<-
 
 plotchart<-
   function(input){
-    if(input$annual.close | input$monthly.close){stopApp()}
-    
-
-    
-    df.1<-
-      read.csv(file=csv[1], stringsAsFactor=FALSE);
-    
-    df.1$data<-
-      "seasonallyAdjusted";
-    
-    df.1$prelim[(nrow(df.1) - 1):nrow(df.1)]<-
-      "P"
-
-    df.2<-
-      read.csv(file=csv[2], stringsAsFactor=FALSE);
-    
-    df.2$data<-
-      "unadjusted";
-    
-    df.2$prelim[(nrow(df.2) - 1):nrow(df.2)]<-
-      "P"
     
     df<-
-      rbind(df.1, df.2);
+      payroll.data[[input$employmentData]]$monthly
     
     time<-
       "Year";
@@ -78,7 +57,7 @@ plotchart<-
       
       df<-
         df[df$data == input[[data.set]][1] , ];
-        #df[df$data == input$data,];
+        
     }
     
     df$Year_Mo<-
@@ -91,31 +70,13 @@ plotchart<-
     df$diff[ 2:nrow(df) ]<-
       df$Value[2:nrow(df)] - df$Value[1:nrow(df)-1 ];
     
-    
-    #df$prelim[1:nrow(df)-2]<-
-    #  "A"
-    
-
-    
     df<-
       df[df$Year>=input[[year]][1] & df$Year<=input[[year]][2] ,  ];
-      #df[df$Year>=input$year[1] & df$Year<=input$year[2] ,  ];
-    
-    #if(input$time=="Year"){
+
     if(time=="Year"){  
-      
+          
       df<-
-        ddply(df
-              , c("Year", "data")
-              , function(x){
-                  response<-
-                    sum(x[, c(input[[measure]][1])], na.rm=TRUE);
-                  
-                  names(response)<-
-                    input[[measure]][1];
-                  
-                  return(response);
-                  });
+        df[df$Period == "M12",]
     } 
     
     if(input$monthly.view=="YoY"){
@@ -139,7 +100,7 @@ plotchart<-
     
     if(input[[fill]][1]=="Neither"){ 
       response<-
-        (response + geom_bar(stat="identity", aes_string(x=x, y=input[[measure]][1])));
+        (response + geom_bar(stat="identity", aes_string(x=x, y=input[[measure]][1]), fill="steel blue"));
     } else {
       response<-
         (response + geom_bar(stat="identity", aes_string(x=x, y=input[[measure]][1], fill=input[[fill]][1])));
@@ -160,6 +121,7 @@ plotchart<-
       (response
       + scale_y_continuous(measures[input[[measure]][1] ], labels=comma)
       + theme_bw()
+      + theme(legend.position="bottom")
       );
    
    if(prefix=="monthly" & input$monthly.view=="Sequential"){
